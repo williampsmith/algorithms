@@ -7,7 +7,6 @@ def binary_search(a, k):
 	center = (left + right) // 2
 
 	while left < right:
-		print(left, right)
 		if k > a[right] or k < a[left]:
 			return False
 		elif a[center] == k:
@@ -24,12 +23,34 @@ def binary_search(a, k):
 	return False
 
 def quicksort(a):
-	def _quicksort(a, low, high):
-		i = partition(a, low, high)
-		_quicksort(a, low, i)
-		_quicksort(a, i, high)
+	def _quicksort(a, start, end):
+		if start < end:
+			# partition the list
+			pivot = partition(a, start, end)
+			# sort both halves
+			_quicksort(a, start, pivot - 1)
+			_quicksort(a, pivot + 1, end)
 		return a
-	_quicksort(a, 0, len(a))
+
+def partition(a, start, end):
+	pivot = a[start]
+	left = start + 1
+	right = end
+	done = False
+
+	while not done:
+		while left <= right and a[left] <= pivot:
+			left = left + 1
+		while right >= left and a[right] >= pivot:
+			right = right - 1
+		if right < left:
+			done = True
+		else:
+			# swap
+			a[left], a[right] = a[right], a[left]
+	# place pivot in proper place
+	a[start], a[right] = a[right], a[start]
+	return right
 
 def mergesort(a):
 	if len(a) < 2:
