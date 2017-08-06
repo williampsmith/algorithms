@@ -77,7 +77,7 @@ def compute_permutations(l):
     return perms
 
 
-def findPaths(self, m, n, N, i, j):
+def findPaths(m, n, N, i, j):
     """
     There is an m by n grid with a ball. Given the start coordinate (i,j)
     of the ball, you can move the ball to adjacent cell or cross the grid
