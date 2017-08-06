@@ -75,3 +75,65 @@ def compute_permutations(l):
             l[j], l[i] = l[i], l[j]
     _compute_permutations(l, 0)
     return perms
+
+
+def findPaths(self, m, n, N, i, j):
+    """
+    There is an m by n grid with a ball. Given the start coordinate (i,j)
+    of the ball, you can move the ball to adjacent cell or cross the grid
+    boundary in four directions (up, down, left, right). However, you can
+    at most move N times. Find out the number of paths to move the ball out
+    of grid boundary. The answer may be very large, return it after mod 10^9 + 7.
+    m: int -- num rows in board
+    n: int -- num cols in board
+    N: int -- num moves allowed
+    i: int -- initial row position
+    j: int -- initial col position
+    Solution uses top-down DP approach.
+    """
+    # 3D array storing num exits for a given position for a given number of steps
+    mem = [[[-1 for _ in range(N)] for _ in range(n)] for _ in range(m)]
+    def exit_move(row, col):
+        return row >= m or col >= n or row < 0 or col < 0
+    def update_mem(row, col, step, val):
+        if mem[row][col][step]  < 0:
+            mem[row][col][step] = val
+        else:
+            mem[row][col][step] += val
+    def _findPaths(m, n, N, i, j):
+        # if can't move, no paths exist
+        if N <= 0:
+            return 0
+        # if in memory, return val
+        if mem[i][j][N - 1] >= 0:
+            return mem[i][j][N - 1]
+        # move left
+        left_paths = 0
+        if exit_move(i, j - 1):
+            left_paths = 1
+        else:
+            left_paths = _findPaths(m, n, N - 1, i, j - 1)
+        # move right
+        right_paths = 0
+        if exit_move(i, j + 1):
+            right_paths = 1
+        else:
+            right_paths = _findPaths(m, n, N - 1, i, j + 1)
+        # move up
+        up_paths = 0
+        if exit_move(i + 1, j):
+            up_paths = 1
+        else:
+            up_paths = _findPaths(m, n, N - 1, i + 1, j)
+        # move down
+        down_paths = 0
+        if exit_move(i - 1, j):
+            down_paths = 1
+        else:
+            down_paths = _findPaths(m, n, N - 1, i - 1, j)
+
+        paths = sum([left_paths, right_paths, up_paths, down_paths])
+        update_mem(i, j, N - 1, paths)
+        return paths
+
+    return _findPaths(m, n, N, i, j) % ((10 ** 9) + 7)
