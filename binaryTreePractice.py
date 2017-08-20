@@ -65,7 +65,7 @@ def similar(a, b):
 		return True
 	elif a == None or b == None:
 		return False
-	
+
 	if a.value != b.value:
 		return False
 
